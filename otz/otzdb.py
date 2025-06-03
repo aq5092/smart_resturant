@@ -1,11 +1,31 @@
 import pandas as pd
 import requests
-TOKEN = "4637|qXz7unlwh8x1SjarXtsWWLR1Kw2QfP25Q9wgykXn"
+
+async def get_token():
+    response = requests.post("https://b-hr.uzautomotors.com/api/login", data={
+        'name': "AQ5092",
+        'password': 'Qwert789+654'
+    })
+    data = response.json()
+    token = data['token']
+    return token
+
+
+# TOKEN = "4677|8rycRElMCA7zdpJ86bWNtarCdfGyq0oiDXgBMdnj"
     
 async def check_lavozim():
+    response = requests.post("https://b-hr.uzautomotors.com/api/login", data={
+        'name': "AQ5092",
+        'password': 'Qwert789+654'
+    })
+    
+    data = response.json()
+    token = data['token']
+    # print(token)
+
     url = f"https://b-hr.uzautomotors.com/api/position-description-detail"
     headers = {
-        "Authorization": f"Bearer {TOKEN}"
+        "Authorization": f"Bearer {token}"
     }
  # response = requests.get("https://b-hr.uzautomotors.com/api/test")
     response = requests.get(url, headers=headers)
