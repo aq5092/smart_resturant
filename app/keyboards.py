@@ -16,8 +16,17 @@ async def otz_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="Lavozim"), KeyboardButton(text="Nizom")],
-            [KeyboardButton(text="Boshqalar"), KeyboardButton(text="Orqara")]
+            [KeyboardButton(text="Boshqalar"), KeyboardButton(text="Orqaga")]
         ],
         resize_keyboard=True
         ##, one_time_keyboard=True
+    )
+
+async def region_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Jami"), KeyboardButton(text="Asaka")],
+            [KeyboardButton(text="Toshkent"), KeyboardButton(text="Xorazm")],
+            [KeyboardButton(text="Orqaga")]
+        ], resize_keyboard= True
     )
