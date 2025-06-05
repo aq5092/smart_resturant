@@ -1,5 +1,11 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup,KeyboardButton
 
+async def get_phone_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="📱 Telefon raqamni yuborish", request_contact=True)]],
+        resize_keyboard=True,
+        # one_time_keyboard=True
+    )
 
 
 async def get_main_keyboard():

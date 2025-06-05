@@ -13,7 +13,7 @@ from app.middlewares import RoleMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 import logging
-
+from db import init_db
 
 
 # Loggerni sozlash
@@ -29,7 +29,7 @@ async def main():
     bot = Bot(token=TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
 
-    # init_db()
+    init_db()
     dp.message.middleware(RoleMiddleware())
     dp.include_router(kadrrouter)
     dp.include_router(otzrouter)

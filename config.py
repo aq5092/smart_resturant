@@ -1,1 +1,2 @@
 TOKEN = '7540878752:AAEXjPPKiP_Dp2ll1ewEc_k1SIaCE84S1ZA'
+DB_NAME = ('users.db')
