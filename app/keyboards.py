@@ -5,7 +5,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeybo
 async def get_main_keyboard():
     return ReplyKeyboardMarkup(
         keyboard= [
-            [KeyboardButton(text="OTZ"), KeyboardButton(text="Kadr")],
+            [KeyboardButton(text="MMB"), KeyboardButton(text="Kadr")],
             [KeyboardButton(text="Kasaba ko'mitasi"), KeyboardButton(text="OTHER")],
             [KeyboardButton(text="Chiqish")]
         ],
@@ -27,12 +27,21 @@ async def kadr_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="RP"), KeyboardButton(text="Report")],
-            [KeyboardButton(text="Boshqalar"), KeyboardButton(text="Orqaga")]
+            [KeyboardButton(text="Check"), KeyboardButton(text="Orqaga")]
             
         ], resize_keyboard=True
     )
 
 
+async def check_rp():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="Tabel bo'yicha"), KeyboardButton(text="Lavozim bo'yicha")],
+            [KeyboardButton(text="Pesonal turi bo'yicha"), KeyboardButton(text="Kod bo'yicha")],
+            [KeyboardButton(text="Orqaga")]
+        ],
+        resize_keyboard=True
+    )
 
 
 
