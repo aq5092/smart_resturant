@@ -7,6 +7,7 @@ from otz.nizomlar import check_nizomlar
 from otz.duplicates import check_duplicates
 from app.states import ReportState
 from aiogram.fsm.context import FSMContext
+from app.get_data import get_Data
    
 # from app.db import init_db, is_user_registered, register_user
 
@@ -107,6 +108,7 @@ async def takror_lavozim_start(message: Message, state: FSMContext):
     await state.set_state(ReportState.duplicate)
     await message.answer("Qaysi hudud bo'yicha ma'lumot kerak?", reply_markup= await kb.region_keyboard())
 
+import re
 @otzrouter.message(ReportState.duplicate)
 async def duplicate_region_handler(message: Message, state: FSMContext):
     res = await check_duplicates()
@@ -126,8 +128,58 @@ async def duplicate_region_handler(message: Message, state: FSMContext):
     await message.answer_document(FSInputFile("otz/duplicates.xlsx"), caption="Duplikatlar faylga saqlandi.")
     await state.clear()
 
+#  === HOST dan prof kod bo'yicha  ====
+@otzrouter.message(F.text == 'Kod prof')
+async def kodprof_region_handler(message: Message):
+    from openpyxl.utils import escape
+    import re
+
+    def clean_excel_string(val):
+        if isinstance(val, str):
+            # Remove illegal unicode characters for Excel XML
+            return re.sub(r'[\x00-\x08\x0b\x0c\x0e-\x1f]', '', val)
+        return val
+
+    data = await get_Data('getPcodeUser')
+    host = pd.DataFrame(data)
+    host = host.applymap(clean_excel_string)
+    
+
+    data = await get_Data("rp-data-api")
+    hr = pd.DataFrame(data)
+    hrustunlar = ["position_code","position_name_uz_latin"]
+    hr = hr[hrustunlar]
 
 
+    # hostdata = await get_Data("getTelUser")
+    # data = pd.DataFrame(hostdata)
+
+    # hostel = data['tel'].tolist()
+
+    # # 1. Barcha elementlarni bitta stringga birlashtiramiz
+    # all_text = " ".join(hostel)
+
+    # # 2. Apostroflarni olib tashlaymiz
+    # all_text = all_text.replace("'", "")
+
+    # # 3. Raqamlarni topamiz va har birini strip qilamiz
+    # raw_list = re.findall(r"\+998\d{9}", all_text)
+
+    # # Natijani ko‘rsatamiz
+    # print(raw_list)
+
+    # print(hostel)
+
+
+
+    with pd.ExcelWriter("otz/profkod.xlsx") as writer:
+        host.to_excel(writer, sheet_name="host", index=False)
+        hr.to_excel(writer, sheet_name="edo", index=False)
+    await message.answer("Ma'lumot tayorlanmoqda...")
+    await message.answer_document(FSInputFile("otz/profkod.xlsx"), caption="Lavozimlar faylga saqlandi.")
+
+
+    
 
     # borcount = len(borlar)
     # yoqcount = len(yoqlar)

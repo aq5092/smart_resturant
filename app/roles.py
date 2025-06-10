@@ -1,7 +1,7 @@
 from typing import List
 ADMINS = set()
 KADR = {1061444753,2112762237}
-OTZ = {1061444753, 306794063, 665777879}
+OTZ = {1061444753, 306794063, 665777879, 53686779} # 53686779 - ilxom
 
 
 def get_user_roles(user_id: int) -> List[str]:
