@@ -5,6 +5,7 @@ import app.keyboards as kb
 from otz.lavozimlar import check_lavozim
 from otz.nizomlar import check_nizomlar
 from otz.duplicates import check_duplicates
+from otz.perevod import check_perevod
 from app.states import ReportState
 from aiogram.fsm.context import FSMContext
 from app.get_data import get_Data
@@ -26,6 +27,32 @@ async def otz_command(message: Message,  roles: list[str]):
 
 
 
+
+# === PEREVOD ===
+@otzrouter.message(F.text == 'Perevod')
+async def perevod_start(message:Message, state:FSMContext):
+    await state.set_state(ReportState.lavozim)
+    res = await check_perevod()
+    with pd.ExcelWriter("otz/perevodlar.xlsx") as writer:
+        res.to_excel(writer, sheet_name="perevod", index=False)
+        
+
+    file_path = FSInputFile("otz/perevodlar.xlsx")
+
+    await message.answer_document(file_path, caption="Perevodlar fayliga saqlandi.")
+    await state.clear()
+    # await message.answer("Qaysi hudud bo'yicha ma'lumot kerak?", reply_markup= await kb.region_keyboard())
+
+    
+
+
+
+
+
+
+
+
+
 # === LAVOZIM ===
 @otzrouter.message(F.text == 'Lavozim')
 async def lavozim_start(message: Message, state: FSMContext):
@@ -44,11 +71,14 @@ async def lavozim_region_handler(message: Message, state: FSMContext):
     elif message.text in ["Asaka", "Xorazm"]:
         bor = borlar[borlar['branchName'] == message.text]
         yoq = yoqlar[yoqlar['branchName'] == message.text]
+
     elif message.text == "Jami":
         bor = borlar
         yoq = yoqlar
+       
     else:
-        await message.answer("Noto‘g‘ri tanlov.")
+        await state.clear()
+        await message.answer("Siz MMB bo'limidasiz", reply_markup= await kb.otz_keyboard())
         return
 
     borcount, yoqcount = len(bor), len(yoq)
@@ -87,7 +117,8 @@ async def nizom_region_handler(message: Message, state: FSMContext):
     elif message.text == "Jami":
         pass  # bor va yoq ni to‘liq olib qo‘yamiz
     else:
-        await message.answer("Noto‘g‘ri tanlov.")
+        await state.clear()
+        await message.answer("Siz MMB bo'limidasiz", reply_markup= await kb.otz_keyboard())
         return
 
     borcount, yoqcount = len(bor), len(yoq)
@@ -119,7 +150,8 @@ async def duplicate_region_handler(message: Message, state: FSMContext):
     elif message.text == "Jami":
         pass
     else:
-        await message.answer("Noto'g'ri tanlov.")
+        await state.clear()
+        await message.answer("Siz MMB bo'limidasiz", reply_markup= await kb.otz_keyboard())
         return
 
     await message.answer(f"Takrorlanayotgan lavozimlar soni: {len(res)}")
@@ -145,9 +177,9 @@ async def kodprof_region_handler(message: Message):
     host = host.applymap(clean_excel_string)
     
 
-    data = await get_Data("rp-data-api")
+    data = await get_Data("getPositionsCodes")
     hr = pd.DataFrame(data)
-    hrustunlar = ["position_code","position_name_uz_latin"]
+    hrustunlar = ["code","name"]
     hr = hr[hrustunlar]
 
 

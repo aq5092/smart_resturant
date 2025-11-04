@@ -22,7 +22,7 @@ async def otz_keyboard():
     return ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="Lavozim"), KeyboardButton(text="Nizom")],
-            [KeyboardButton(text="Lavozim takror"), KeyboardButton(text="Kod prof")],
+            [KeyboardButton(text="Lavozim takror"), KeyboardButton(text="Perevod")],
             [KeyboardButton(text="Orqaga")]
         ],
         resize_keyboard=True
