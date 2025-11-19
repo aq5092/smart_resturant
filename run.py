@@ -6,14 +6,14 @@ from otz.handlers import otzrouter
 from otz.auto_send import send_daily_mmb
 from kadr.handlers import kadrrouter
 from kadr.auto_send import send_daily_kadr
-from app.db import init_db
+
 # from aiogram.enums import ParseMode
 from aiogram.fsm.storage.memory import MemoryStorage
 from app.middlewares import RoleMiddleware
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.cron import CronTrigger
 import logging
-from db import init_db
+
 
 
 # Loggerni sozlash
@@ -29,7 +29,7 @@ async def main():
     bot = Bot(token=TOKEN)
     dp = Dispatcher(storage=MemoryStorage())
 
-    init_db()
+    
     dp.message.middleware(RoleMiddleware())
     dp.include_router(kadrrouter)
     dp.include_router(otzrouter)

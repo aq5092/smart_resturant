@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery, ReplyKeyboardRemove, FSInputFi
 from aiogram.filters import CommandStart, Command
 import app.keyboards as kb
 import pandas as pd
-from db import is_user_registered, register_user
+
 from aiogram.exceptions import TelegramBadRequest
 from aiogram import Bot
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
@@ -34,7 +34,7 @@ async def start_command(message: Message, bot: Bot):
     # Guruhga a'zo ekanligini tekshir
     is_member = await is_user_in_group(bot, telegram_id, REQUIRED_GROUP_ID)
     if not is_member:
-        invite_link ="https://t.me/+K2De7eeAtZI2NDNi"   # guruh uchun invite link yoki username
+        invite_link ="https://t.me/+b2hko4fbBr9jN2Y6"   # guruh uchun invite link yoki username
         await message.answer(f"❗️Botdan foydalanish uchun quyidagi guruhga a'zo bo'lishingiz kerak:\n👉 {invite_link}")
         return
 
