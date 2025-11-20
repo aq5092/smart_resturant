@@ -6,13 +6,13 @@ import uuid
 
 # Telegram bot userlari (bot_users)
 class BotUser(models.Model):
-    id = models.BigIntegerField(primary_key=True)  # Telegram user ID
-    name = models.CharField(max_length=255)
+    telegram_id = models.BigIntegerField(primary_key=True)  # Telegram user ID
+    username = models.CharField(max_length=255)
     phone = models.CharField(max_length=20, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.name} ({self.id})"
+        return f"{self.username} ({self.id})"
 
 
 # Rollar

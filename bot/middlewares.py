@@ -3,7 +3,7 @@
 from aiogram.types import Message
 from aiogram.dispatcher.middlewares.base import BaseMiddleware
 from typing import Callable, Dict, Any, Awaitable
-from app.roles  import get_user_roles
+
 
 from aiogram.types import Message
 from aiogram.dispatcher.middlewares.base import BaseMiddleware
@@ -18,8 +18,8 @@ class RoleMiddleware(BaseMiddleware):
         data: Dict[str, Any]
     ) -> Any:
         user_id = event.from_user.id
-        roles = get_user_roles(user_id)
-        data["roles"] = roles  # Endi handlerlarga ro‘yxat sifatida beriladi
+        
+        
         return await handler(event, data)
 
 
