@@ -23,9 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%j-wl_+&0j62%tmwir-(%c90_&z=0*v=51iu(em)+avv($=w66'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '176.124.200.80',
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -128,7 +132,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+# STATIC_ROOT = '/root/smart_resturant/backend/staticfiles/'
+STATIC_ROOT = "/var/www/django_static/"
+STATICFILES_DIRS = []   # Agar bor bo‘lsa, qoldirishing mumkin
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

@@ -7,6 +7,17 @@ from dotenv import load_dotenv
 from aiogram.exceptions import TelegramBadRequest
 from aiogram import Bot
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from aiogram.types import (
+    Message,
+    CallbackQuery,
+    ReplyKeyboardRemove,
+    FSInputFile,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    WebAppInfo,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+)
 load_dotenv()
 import os
 import re
@@ -15,9 +26,11 @@ import aiohttp
 
 router = Router()
 
-baseurl = os.getenv("BASE_URL")
+BASE_URL = os.getenv("BASE_URL")
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 GROUP_INVITE_LINK = os.getenv("GROUP_INVITE_LINK")
 GROUP_ID = int(os.getenv("GROUP_CHAT_ID"))
+
 
 
 
@@ -44,7 +57,7 @@ async def register_user_to_backend(message: Message):
         "phone": message.contact.phone_number,
     }
     async with aiohttp.ClientSession() as session:
-        async with session.post(baseurl +"botusers/", json=payload) as resp:
+        async with session.post(BASE_URL +"botusers/", json=payload) as resp:
             if resp.status in (200, 201):
                 return True, await resp.json()
             else:
@@ -57,7 +70,7 @@ async def register_user_to_backend(message: Message):
 
 async def check_user_in_backend(message:Message):
     async with aiohttp.ClientSession() as session:
-        async with session.get(baseurl + "botusers/") as resp:
+        async with session.get(BASE_URL + "botusers/") as resp:
             if resp.status in (200, 201):
                 data = await resp.json()
                 telegram_id = message.from_user.id
@@ -113,46 +126,46 @@ async def handle_phone(message: Message, bot: Bot):
     check_user = await check_user_in_backend(message)
     if check_user:
         await message.answer(
-                "Siz oldin ro'yxatdan o'tgansiz! Botdan foydalanishingiz mumkin.",
-                reply_markup=await kb.get_main_keyboard()
-            )
-    else:
-        success, result = await register_user_to_backend(message)
+            "Siz oldin ro'yxatdan o'tgansiz! Botdan foydalanishingiz mumkin."
+        )
 
-        if success:
-            
+        # Mini-app tugma
+        await message.answer(
+            "Menyu va buyurtma berish uchun quyidagi tugmani bosing 👇",
+            reply_markup=await kb.get_webapp_main_keyboard()
+        )
+        return
 
-            await message.answer(
-                f"Tabriklaymiz! Ro'yxatdan muvaffaqiyatli o'tdingiz!\n"
-                f"Ismingiz: {message.from_user.first_name}",
-                reply_markup=ReplyKeyboardRemove()
-            )
+    success, result = await register_user_to_backend(message)
 
-            # Guruhga a'zo ekanligini tekshirish
-            try:
-                member = await bot.get_chat_member(GROUP_ID, message.from_user.id)
-                if member.status in ("member", "administrator", "creator"):
-                    await message.answer(
-                        "Siz allaqachon guruh a'zosisiz! Botdan foydalanishingiz mumkin.",
-                        reply_markup=await kb.main_keyboard()
-                    )
-                else:
-                    await message.answer(f"Guruhga a'zo bo‘ling:\n{GROUP_INVITE_LINK}")
-            except:
-                await message.answer("Guruhni tekshirishda xatolik. Keyinroq urinib ko‘ring.")
+    if success:
+        await message.answer(
+            f"Tabriklaymiz! Ro'yxatdan muvaffaqiyatli o'tdingiz!\n"
+            f"Ismingiz: {message.from_user.first_name}",
+            reply_markup=ReplyKeyboardRemove()
+        )
 
-        else:
-            error_msg = result.get("detail") if isinstance(result, dict) else str(result)
+        # Mini-app tugma
+        await message.answer(
+            "Endi menyu va buyurtma berish uchun Mini-App ni oching 👇",
+            reply_markup=await kb.get_webapp_main_keyboard()
+        )
 
-
-            if "allaqachon" in error_msg.lower():
+        # Guruhga a'zo ekanligini tekshirish qismi o'zinga qoladi...
+        try:
+            member = await bot.get_chat_member(GROUP_ID, message.from_user.id)
+            if member.status in ("member", "administrator", "creator"):
                 await message.answer(
-                    "Siz oldin ro'yxatdan o'tgansiz! Botdan foydalanishingiz mumkin.",
-                    reply_markup=await kb.main_keyboard()
+                    "Siz allaqachon guruh a'zosisiz! Botdan foydalanishingiz mumkin."
                 )
             else:
-                await message.answer(f"Xatolik: {error_msg}")
+                await message.answer(f"Guruhga a'zo bo‘ling:\n{GROUP_INVITE_LINK}")
+        except Exception:
+            await message.answer("Guruhni tekshirishda xatolik. Keyinroq urinib ko‘ring.")
 
+    else:
+        error_msg = result.get("detail") if isinstance(result, dict) else str(result)
+        await message.answer(f"Xatolik: {error_msg}")
 
 @router.message(F.text == "Chiqish")
 async def exit_command(message: Message):
@@ -163,16 +176,4 @@ async def exit_command(message: Message):
 @router.message(F.text == "Orqaga")
 async def back_command(message: Message):
     await message.answer("Siz asosiy menudasiz.", reply_markup= await kb.get_main_keyboard())
-
-
-
-
-   
-
-
-
-
-
-
-
     

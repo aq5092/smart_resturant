@@ -45,7 +45,7 @@ function goTo(path) {
         <div>
           <h2 class="welcome-title">Assalomu alaykum 👋</h2>
           <p class="welcome-subtitle">
-            UzAuto Mini App orqali HR ma’lumotlarni tezkor ko‘rish va boshqarish imkoniyati.
+            Restaurant Mini App orqali HR ma’lumotlarni tezkor ko‘rish va boshqarish imkoniyati.
           </p>
         </div>
         <button class="welcome-cta" type="button" @click="goTo('/register')">
@@ -63,11 +63,7 @@ function goTo(path) {
     <section class="section">
       <h3 class="section-title">Qisqa statistikalar</h3>
       <div class="stats-grid">
-        <div
-          v-for="item in stats"
-          :key="item.id"
-          class="stat-card"
-        >
+        <div v-for="item in stats" :key="item.id" class="stat-card">
           <span class="stat-label">{{ item.label }}</span>
           <p class="stat-value">{{ item.value }}</p>
           <p class="stat-trend">
@@ -84,13 +80,8 @@ function goTo(path) {
     <section class="section">
       <h3 class="section-title">Tezkor amallar</h3>
       <div class="quick-grid">
-        <button
-          v-for="action in quickActions"
-          :key="action.id"
-          class="quick-card"
-          type="button"
-          @click="goTo(action.to)"
-        >
+        <button v-for="action in quickActions" :key="action.id" class="quick-card" type="button"
+          @click="goTo(action.to)">
           <div class="quick-icon">
             {{ action.icon }}
           </div>
@@ -111,11 +102,7 @@ function goTo(path) {
     <section class="section">
       <h3 class="section-title">So‘nggi faollik</h3>
       <div class="recent-list">
-        <div
-          v-for="item in recentItems"
-          :key="item.id"
-          class="recent-item"
-        >
+        <div v-for="item in recentItems" :key="item.id" class="recent-item">
           <div class="recent-main">
             <p class="recent-title">{{ item.title }}</p>
             <p class="recent-meta">

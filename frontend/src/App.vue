@@ -15,8 +15,8 @@ import { RouterLink, RouterView } from 'vue-router'
           height="40"
         />
         <div class="brand-text">
-          <h1 class="brand-title">UzAuto Mini App</h1>
-          <p class="brand-subtitle">Tezkor HR panel</p>
+          <h1 class="brand-title">Register Mini App</h1>
+          <p class="brand-subtitle">Restaurant panel</p>
         </div>
       </div>
 

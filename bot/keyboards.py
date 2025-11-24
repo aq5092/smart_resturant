@@ -1,4 +1,38 @@
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup,KeyboardButton
+from aiogram.types import (
+    Message,
+    CallbackQuery,
+    ReplyKeyboardRemove,
+    FSInputFile,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton,
+    WebAppInfo,
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+)
+...
+
+from dotenv import load_dotenv
+import os 
+load_dotenv()
+FRONTEND_URL = os.getenv("FRONTEND_URL")
+
+
+async def get_webapp_main_keyboard():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(
+                    text="🍽 Menyu va buyurtma",
+                    web_app=WebAppInfo(url="https://otnpdf.ru"),
+                )
+            ],
+            [
+                KeyboardButton(text="Chiqish")
+            ]
+        ],
+        resize_keyboard=True
+    )
+
 
 async def get_phone_keyboard():
     return ReplyKeyboardMarkup(
